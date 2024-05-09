@@ -104,3 +104,7 @@ timeout: the monitored command dumped core
 
 flag: CTFlearn{c0ntr0ling_r1p_1s_n0t_t00_h4rd_abjkdlfa}
 
+
+
+recommend to check out this:
+https://crazyeights225.github.io/rip-my-bof/
