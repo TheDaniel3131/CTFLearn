@@ -8,3 +8,4 @@ sock.sendlineafter("Input some text:", payload)
 
 while True:
 	print(sock.recvline().decode("utf-8"))
+	
