@@ -17,7 +17,7 @@ Legend: buff MODIFIED padding MODIFIED
 0xffd75d08 | ff ff ff ff ff ff ff ff |
 0xffd75d10 | c0 45 f2 f7 00 a0 04 08 |
 0xffd75d18 | 28 5d d7 ff 8b 86 04 08 |
-Return address: 0x0804868b (we want to send payload to this address to get the flag)
+Return address: 0x0804868b (we want to send payload to this address to get the flag) (little endian)
 
 
 Buffer overflow (all 64 bytes):
@@ -109,3 +109,6 @@ flag: CTFlearn{c0ntr0ling_r1p_1s_n0t_t00_h4rd_abjkdlfa}
 recommend to check out these:
 https://crazyeights225.github.io/rip-my-bof/
 https://github.com/RasyidMF/ctf-writeup/tree/master/CTF%20Learn/Easy/RIP%20my%20bof%20(Binary)
+https://github.com/RutraSan/ctflearn/blob/main/RIP%20my%20bof.md 
+
+(We can also pack as big endian using `endian='big'` parameter in packing functions. If the binary is 32 bits, then we use `p32()`. It converts the address to 32 bits/4 bytes)
